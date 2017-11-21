@@ -13,103 +13,106 @@ class QuestionViewController: UIViewController {
     @IBOutlet weak var questionSubject: UILabel!
     @IBOutlet weak var questionTitle: UILabel!
     @IBOutlet weak var button1: UIButton!
+    var btn1 = false
     @IBOutlet weak var button2: UIButton!
+    var btn2 = false
     @IBOutlet weak var button3: UIButton!
+    var btn3 = false
     @IBOutlet weak var button4: UIButton!
+    var btn4 = false
     @IBOutlet weak var submitBtn: UIButton!
     var subject = ""
-    var btn1 = false
-    var btn2 = false
-    var btn3 = false
-    var btn4 = false
+    
+    var themes : Theme!
     var totalGuess = 0
     var totalQuestion = 0
     var right = 0
-    var theme : Theme!
-    
-    func buttonPressed() {
-        btn1 = false
-        btn2 = false
-        btn3 = false
-        btn4 = false
-        button1.backgroundColor = UIColor.gray
-        button2.backgroundColor = UIColor.gray
-        button3.backgroundColor = UIColor.gray
-        button4.backgroundColor = UIColor.gray
-    }
     
     @IBAction func button1(_ sender: Any) {
-        btn1 = true
         buttonPressed()
+        btn1 = true
         button1.backgroundColor = UIColor(red: 250.0/255.0, green: 128.0/255.0, blue: 114.0/255.0, alpha: 1.0)
     }
     
     @IBAction func button2(_ sender: Any) {
-        btn2 = true
+        
         buttonPressed()
+        btn2 = true
         button2.backgroundColor = UIColor(red: 250.0/255.0, green: 128.0/255.0, blue: 114.0/255.0, alpha: 1.0)
     }
     
     @IBAction func button3(_ sender: Any) {
-        btn3 = true
+        
         buttonPressed()
+        btn3 = true
         button3.backgroundColor = UIColor(red: 250.0/255.0, green: 128.0/255.0, blue: 114.0/255.0, alpha: 1.0)
     }
     
     @IBAction func button4(_ sender: Any) {
-        btn4 = true
+        
         buttonPressed()
+        btn4 = true
         button4.backgroundColor = UIColor(red: 250.0/255.0, green: 128.0/255.0, blue: 114.0/255.0, alpha: 1.0)
+    }
+    
+    func buttonPressed() {
+        button1.backgroundColor = UIColor.gray
+        btn1 = false
+        button2.backgroundColor = UIColor.gray
+        btn2 = false
+        button3.backgroundColor = UIColor.gray
+        btn3 = false
+        button4.backgroundColor = UIColor.gray
+        btn4 = false
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    //questionSubject!.text! = subject
-//        questionTitle.text = theme!.questions[totalGuess].text
-//        button1.setTitle(theme!.questions[totalGuess].choices[0], for: UIControlState.normal)
-//        button2.setTitle(theme!.questions[totalGuess].choices[1], for: UIControlState.normal)
-//        button3.setTitle(theme!.questions[totalGuess].choices[2], for: UIControlState.normal)
-//        button4.setTitle(theme!.questions[totalGuess].choices[3], for: UIControlState.normal)
-        questionTitle.text = "This is an example question"
-        button1.setTitle("exampleBtn1", for: UIControlState.normal)
-        button2.setTitle("exampleBtn2", for: UIControlState.normal)
-        button3.setTitle("exampleBtn3", for: UIControlState.normal)
-        button4.setTitle("exampleBtn4", for: UIControlState.normal)
+        questionSubject!.text! = subject
+        if (themes != nil) {
+            questionTitle.text = themes!.questions[totalGuess].text
+            button1.setTitle(themes!.questions[totalGuess].choices[0], for: UIControlState.normal)
+            button2.setTitle(themes!.questions[totalGuess].choices[1], for: UIControlState.normal)
+            button3.setTitle(themes!.questions[totalGuess].choices[2], for: UIControlState.normal)
+            button4.setTitle(themes!.questions[totalGuess].choices[3], for: UIControlState.normal)
+        } else {
+            print("Theme is nil")
+        }
     }
 
     @IBAction func SubmitButton(_ sender: Any) {
+        print("I'm in submit button")
         if (btn1 || btn2 || btn3 || btn4) {
+            print("I'm in submit button if ")
             let AnswerPage = self.storyboard?.instantiateViewController(withIdentifier: "AnswerVC") as! AnswerViewController
-            //AnswerPage.subjectTitle = subject
-            AnswerPage.subjectTitle = "exampleSubject"
-            //AnswerPage.q = theme!.questions[totalGuess].text
-            AnswerPage.q = "exampleQ"
-            /*if (btn1) {
-                AnswerPage.guessed = theme!.questions[totalGuess].choices[0]
-                if(theme!.questions[totalGuess].choices[0] == theme!.questions[totalGuess].answer) {
+            AnswerPage.subjectTitle = subject
+            AnswerPage.q = themes!.questions[totalGuess].text
+            AnswerPage.a = themes!.questions[totalGuess].answer
+            if (btn1) {
+                AnswerPage.guessed = themes!.questions[totalGuess].choices[0]
+                if(themes!.questions[totalGuess].choices[0] == themes!.questions[totalGuess].answer) {
                     right += 1
                 }
             }  else if (btn2) {
-                AnswerPage.guessed = theme!.questions[totalGuess].choices[1]
-                if(theme!.questions[totalGuess].choices[1] == theme!.questions[totalGuess].answer) {
+                AnswerPage.guessed = themes!.questions[totalGuess].choices[1]
+                if(themes!.questions[totalGuess].choices[1] == themes!.questions[totalGuess].answer) {
                     right += 1
                 }
             } else if (btn3) {
-                AnswerPage.guessed = theme!.questions[totalGuess].choices[2]
-                if(theme!.questions[totalGuess].choices[2] == theme!.questions[totalGuess].answer) {
+                AnswerPage.guessed = themes!.questions[totalGuess].choices[2]
+                if(themes!.questions[totalGuess].choices[2] == themes!.questions[totalGuess].answer) {
                     right += 1
                 }
             } else if (btn4) {
-                AnswerPage.guessed = theme!.questions[totalGuess].choices[3]
-                if(theme!.questions[totalGuess].choices[3] == theme!.questions[totalGuess].answer) {
+                AnswerPage.guessed = themes!.questions[totalGuess].choices[3]
+                if(themes!.questions[totalGuess].choices[3] == themes!.questions[totalGuess].answer) {
                     right += 1
                 }
-            }*/
+            }
             totalGuess += 1
             AnswerPage.totalGuess = self.totalGuess
-            //AnswerPage.totalQuestion = theme!.questions.count
-            AnswerPage.totalQuestion = 1
-            AnswerPage.theme = self.theme
+            AnswerPage.totalQuestion = themes!.questions.count
+            AnswerPage.themes = self.themes
             AnswerPage.right = self.right
             self.present(AnswerPage, animated: false, completion: nil)
         }

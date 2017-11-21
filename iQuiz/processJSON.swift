@@ -10,26 +10,24 @@ import Foundation
 
 class processJSON {
     var URL = fetchURL.URL
-    var quizThemes : [Theme] = [Theme]()
-    var themes : [Theme] = []
     var titles : [String] = []
     var descriptions : [String] = []
-    
+    var themes : [Theme] = []
     func checkExist() {
         let tempURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(ProcessInfo.processInfo.globallyUniqueString, isDirectory: true)
         let filePath = tempURL!.appendingPathComponent("iQuiz.json").absoluteString
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: filePath) {
-            print("FILE AVAILABLE")
+            print("File found")
         } else {
-            print("FILE NOT AVAILABLE")
+            print("File not found")
         }
     }
     
     func HTTPRequest(completionHandler: @escaping () -> Void) {
         let task = URLSession.shared.dataTask(with: NSURL(string: URL)! as URL) { (data, response, error) -> Void in
             if error != nil {
-                print(error)
+                print("error")
             } else {
                 let HTTPResponse = response as! HTTPURLResponse
                 let statusCode = HTTPResponse.statusCode
@@ -39,26 +37,24 @@ class processJSON {
                         print(json)
                         
                         guard let subject = json as? [[String : AnyObject]] else {return}
-                        for s in subject {
-                            let title = s["title"] as? String
+                        for curr in subject {
+                            let title = curr["title"] as? String
+                            let description = curr["desc"] as? String
+                            let questions = curr["questions"]
+                            var qObjs : [Question] = []
                             self.titles.append(title!)
-                            let description = s["desc"] as? String
                             self.descriptions.append(description!)
-                            let questions = s["questions"]
                             
-                            var questionObjs : [Question] = []
-                            
-                            for q in questions as! [[String:Any]] {
-                                let text = q["text"] as! String
-                                let correctAnswerInt = q["answer"] as! String
-                                let answerList = q["answers"] as! [String]
+                            for currQ in questions as! [[String:Any]] {
+                                let correctAnswerInt = currQ["answer"] as! String
+                                let answerList = currQ["answers"] as! [String]
+                                let text = currQ["text"] as! String
                                 let correctAnswer = answerList[(Int(correctAnswerInt)! - 1)]
-                                let inputquestion : Question = Question(text: text, answer: correctAnswer, choices: answerList)
-                                questionObjs.append(inputquestion)
+                                let inputQ : Question = Question(text: text, answer: correctAnswer, choices: answerList)
+                                qObjs.append(inputQ)
                             }
-                            
-                            let inputtopic: Theme = Theme(subject: String(describing: title), desc: String(describing: description), questions: questionObjs)
-                            self.themes.append(inputtopic)
+                            let input: Theme = Theme(subject: String(describing: title), desc: String(describing: description), questions: qObjs)
+                            self.themes.append(input)
                         }
                         completionHandler()
                     }  catch {
@@ -69,5 +65,5 @@ class processJSON {
         }
         task.resume()
     }
-
+    
 }

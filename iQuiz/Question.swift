@@ -10,12 +10,11 @@ import Foundation
 
 public class Question {
     public var text : String
-    public var answer : String
     public var choices : [String]
-    
+    public var answer : String
     init(text : String, answer : String, choices : [String]){
         self.text = text
-        self.answer = answer
         self.choices = choices
+        self.answer = answer
     }
 }

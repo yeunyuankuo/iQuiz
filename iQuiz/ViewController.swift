@@ -13,30 +13,26 @@ struct fetchURL {
 }
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
     @IBOutlet weak var tableView: UITableView!
-    
     let input = processJSON()
-    var themes = ["Mathematics", "Marvel Super Heroes", "Science"]
-    var descriptions = ["Learn more about Mathematics", "Learn more about Heroes", "Learn more about Science"]
-    
+    //var themes = ["Mathematics", "Marvel Super Heroes", "Science"]
+    //var descriptions = ["Learn more about Mathematics", "Learn more about Heroes", "Learn more about Science"]
     var images = ["40-math", "40-marvel", "40-science"]
-    //var subjects: [String] = []
-    //var subtitles: [String] = []
+    var subjects: [String] = []
+    var subtitles: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*tableView.dataSource = self
+        tableView.dataSource = self
         tableView.delegate = self
         self.input.HTTPRequest {
             self.subjects = self.input.titles
             self.subtitles = self.input.descriptions
             self.tableView.reloadData()
         }
-
         DispatchQueue.main.async { () -> Void in
             self.tableView.reloadData()
-        }*/
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,11 +41,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TableCellView", for: indexPath) as! TableCellView
-        //cell.title.text = self.subjects[indexPath.row]
-        cell.title.text = self.themes[indexPath.row]
-        //cell.desc.text = self.subtitles[indexPath.row]
-        cell.desc.text = self.descriptions[indexPath.row]
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "TableCellView", for: indexPath as IndexPath) as! TableCellView
+        cell.title.text = self.subjects[indexPath.row]
+        cell.desc.text = self.subtitles[indexPath.row]
         cell.imageView?.image = UIImage(named: self.images[indexPath.row])
         return cell
     }
@@ -61,21 +55,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        //return self.subjects.count
-        return self.themes.count
+        return self.subjects.count
     }
     
-    /*private func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
-        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let QuestionVC = self.storyboard?.instantiateViewController(withIdentifier: "QuestionVC") as! QuestionViewController
-
         QuestionVC.subject = subjects[indexPath.row]
-        QuestionVC.theme = input.themes[indexPath.row]
         QuestionVC.totalQuestion = input.themes[indexPath.row].questions.count
+        QuestionVC.themes = input.themes[indexPath.row]
         self.present(QuestionVC, animated: false, completion: nil)
-        //navigationController?.pushViewController(QuestionVC, animated: true)
-        //performSegue(withIdentifier: "segue", sender: self)
-    }*/
+    }
     
     func dismissAlert(alert: UIAlertAction!) {
         self.dismiss(animated: true)
@@ -83,21 +72,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBAction func settingPressed(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "Alert!", message: "Settings go here", preferredStyle: .alert)
-//        let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel) {
-//            action in
-//        }
-//        alert.addAction(cancelAlert)
-        
-        let ok = UIAlertAction(title: "OK", style: .default) {
+        let cancelAlert = UIAlertAction(title: "Cancel", style: .cancel) {
             action in
         }
-        alert.addAction(ok)
-        
+        alert.addAction(cancelAlert)
         alert.addTextField { (textField: UITextField!) -> Void in
-            textField.placeholder = "Link for JSON"
+            textField.placeholder = "Enter URL for JSON..."
         }
-        
-        let getAction : UIAlertAction = UIAlertAction(title: "Check!", style: .cancel, handler:{[weak self]
+        let getAction : UIAlertAction = UIAlertAction(title: "Check!", style: .default, handler:{[weak self]
             (paramAction:UIAlertAction!) in
             if let textFields = alert.textFields {
                 let textF = textFields as [UITextField]
@@ -113,12 +95,5 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         alert.addAction(getAction)
         self.present(alert, animated: true, completion: nil)
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "segue" {
-//            // Setup new view controller
-//        }
-//    }
-    
 }
 

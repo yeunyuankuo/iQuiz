@@ -14,18 +14,38 @@ class AnswerViewController: UIViewController {
     @IBOutlet weak var question: UILabel!
     @IBOutlet weak var answer: UILabel!
     @IBOutlet weak var correctness: UILabel!
-    //var subjectTitle = ""
-    var subjectTitle = "exampleSubjectTitle"
-    //var q = ""
-    var q = "exampleQuestion"
-    //var a = ""
-    var a = "exampleAnswer"
-    var ifCorrect = ""
     var guessed = ""
     var right = 0
     var totalGuess = 0
     var totalQuestion = 0
-    var theme: Theme!
+    var themes: Theme!
+    var subjectTitle = ""
+    var q = ""
+    var a = ""
+    var ifCorrect = ""
+
+    @IBAction func NextButton(_ sender: Any) {
+        if(totalGuess < totalQuestion) {
+            let QuestionVC = self.storyboard?.instantiateViewController(withIdentifier: "QuestionVC") as! QuestionViewController
+            QuestionVC.themes = self.themes
+            QuestionVC.subject = self.subjectTitle
+            QuestionVC.right = self.right
+            QuestionVC.totalGuess = self.totalGuess
+            QuestionVC.totalQuestion = themes!.questions.count
+            self.present(QuestionVC, animated: false, completion: nil)
+        } else {
+            let FinishedVC = self.storyboard?.instantiateViewController(withIdentifier: "FinishedVC") as! FinishedViewController
+            FinishedVC.right = self.right
+            FinishedVC.subjectTitle = self.subjectTitle
+            FinishedVC.total = self.totalQuestion
+            self.present(FinishedVC, animated: false, completion: nil)
+        }
+    }
+    
+    @IBAction func BackButton(_ sender: Any) {
+        let MainVC = self.storyboard?.instantiateViewController(withIdentifier: "MainVC") as! ViewController
+        self.present(MainVC, animated: false, completion: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,33 +59,4 @@ class AnswerViewController: UIViewController {
         }
         correctness.text = ifCorrect
     }
-
-    @IBAction func NextButton(_ sender: Any) {
-        if(totalGuess < totalQuestion) {
-            let QuestionVC = self.storyboard?.instantiateViewController(withIdentifier: "QuestionVC") as! QuestionViewController
-            QuestionVC.totalGuess = self.totalGuess
-            QuestionVC.totalQuestion = theme!.questions.count
-            QuestionVC.theme = self.theme
-            QuestionVC.subject = self.subjectTitle
-            QuestionVC.right = self.right
-            self.present(QuestionVC, animated: false, completion: nil)
-        } else {
-            let FinishedVC = self.storyboard?.instantiateViewController(withIdentifier: "FinishedVC") as! FinishedViewController
-            FinishedVC.subjectTitle = self.subjectTitle
-            FinishedVC.right = self.right
-            FinishedVC.total = self.totalQuestion
-            self.present(FinishedVC, animated: false, completion: nil)
-        }
-    }
-    
-    @IBAction func BackButton(_ sender: Any) {
-        let MainVC = self.storyboard?.instantiateViewController(withIdentifier: "main") as! ViewController
-        self.present(MainVC, animated: false, completion: nil)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 }

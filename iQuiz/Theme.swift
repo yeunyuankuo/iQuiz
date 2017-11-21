@@ -10,12 +10,11 @@ import Foundation
 
 public class Theme {
     public var subject : String
-    public var desc : String
     public var questions : [Question]
-    
+    public var desc : String
     init(subject : String, desc : String, questions : [Question]) {
         self.subject = subject
-        self.desc = desc
         self.questions = questions
+        self.desc = desc
     }
 }

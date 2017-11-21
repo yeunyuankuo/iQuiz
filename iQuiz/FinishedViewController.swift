@@ -10,8 +10,9 @@ import UIKit
 
 class FinishedViewController: UIViewController {
     @IBOutlet weak var subject: UILabel!
-    @IBOutlet weak var score: UILabel!
     @IBOutlet weak var performance: UILabel!
+    @IBOutlet weak var score: UILabel!
+    
     var subjectTitle = ""
     var right = 0
     var total = 0
@@ -30,7 +31,7 @@ class FinishedViewController: UIViewController {
     }
 
     @IBAction func NextButton(_ sender: AnyObject) {
-        let MainVC = self.storyboard?.instantiateViewController(withIdentifier: "main") as! ViewController
+        let MainVC = self.storyboard?.instantiateViewController(withIdentifier: "MainVC") as! ViewController
         self.present(MainVC, animated: false, completion: nil)
     }
     
